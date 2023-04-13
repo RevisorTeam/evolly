@@ -1,7 +1,5 @@
 # Making your first evolution with Evolly
 
----
-
 Evolly was designed as a flexible framework with ability to be integrated 
 in any DL pipeline. 
 
@@ -163,8 +161,6 @@ pressing Ctrl + C if you are running it in terminal window.
 
 # Analyzing results
 
----
-
 When evolution is finished you can utilize `analyze_runs` and `visualize_run` functions
 to find "the best" model and visualize progress:
 
@@ -179,4 +175,4 @@ and
 Examples:
 * [Finding "the best" model and building plots](examples/build_plots.py) - making matplotlib plots 
 and saving them as image.
-* [Visualizing evolution](examples/visualize_run.py) - making video with evolution progression 
+* [Visualizing evolution](examples/visualize_run.py) - making video with evolution progression
