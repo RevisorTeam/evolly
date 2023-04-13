@@ -1,0 +1,102 @@
+{
+  "train_loss": [
+    0.006407538327326377,
+    0.0042964904903123775,
+    0.0035294531950727107,
+    0.0030043069395547114,
+    0.002595779942907393
+  ],
+  "val_metric": [
+    0.8549,
+    0.8726,
+    0.8988,
+    0.8875,
+    0.9025
+  ],
+  "config": {
+    "train": {
+      "save_dir": "fashion-mnist/model",
+      "accelerators": [
+        "cuda:0"
+      ]
+    },
+    "val": {
+      "metric_op": "max"
+    },
+    "model": {
+      "name": "0000_00001_0.90547",
+      "parent": null
+    },
+    "search": {
+      "target": 10000000,
+      "w": 0.02
+    },
+    "genotype": {
+      "branches": [
+        [
+          [
+            1,
+            1,
+            "mobilenet",
+            5,
+            2,
+            256,
+            false
+          ],
+          [
+            2,
+            2,
+            "inception_a",
+            3,
+            1,
+            256,
+            false
+          ],
+          [
+            3,
+            3,
+            "inception_b",
+            3,
+            2,
+            512,
+            true
+          ],
+          [
+            4,
+            4,
+            "mobilenet",
+            5,
+            1,
+            512,
+            true
+          ],
+          [
+            5,
+            5,
+            "inception_a",
+            3,
+            2,
+            1024,
+            false
+          ],
+          [
+            6,
+            6,
+            "resnet",
+            3,
+            2,
+            1024,
+            false
+          ]
+        ]
+      ],
+      "branch_names": [
+        "img"
+      ]
+    }
+  },
+  "parameters": 8486554,
+  "flops": 3301029888,
+  "training_time": 126.7706549167633,
+  "fitness": 0.905466908356091
+}
