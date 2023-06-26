@@ -4,7 +4,7 @@
 [neural architecture search](https://en.wikipedia.org/wiki/Neural_architecture_search) 
 framework designed to make running evolution as flexible as possible.
 
-Learn details of the Evolly's pipeline in our [Towards Data Science post](https://medium.com/@revisorteam).
+Learn details of the Evolly's pipeline in our [Medium post](https://medium.com/@RevisorTeam/evolutionary-framework-for-searching-backbone-architecture-evolly-f568383ced51).
 
 ## What does Evolly do?
 
@@ -50,9 +50,9 @@ If tensorflow (>=2.3) and torch (>=1.9.0) are already installed, you can install
 
 ## Improvements
 
-We are open to any help. Check out [our ideas here](https://medium.com/@revisorteam) to learn how we can upgrade Evolly together:
+We are open to any help. Check out [our ideas here](https://medium.com/@RevisorTeam/evolutionary-framework-for-searching-backbone-architecture-evolly-f568383ced51) to learn how we can upgrade Evolly together:
 
-- [ ] Test default PyTorch blocks
+- [x] Test default PyTorch blocks
 - [ ] Add new data types
 - [ ] Add new default blocks
 - [ ] Utilize [mutation rate](https://en.wikipedia.org/wiki/Mutation_rate) and add mutation probabilities

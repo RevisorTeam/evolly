@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 from evolly import build_model, unpack_genotype
@@ -85,6 +86,8 @@ class CustomModel(nn.Module):
 
 def main():
 
+	device = 'cuda:0'
+
 	branches_blocks = [
 		[
 			[1, 1, 'mobilenet', 5, 2, 256, False],
@@ -119,15 +122,26 @@ def main():
 		pooling_type='avg',
 		pooling_dense_filters=1024,
 		custom_head=False,
-	)
+	).to(device)
 
 	print('Default model')
 	print(model)
 	print()
 
 	print('Custom model')
-	custom_model = CustomModel()
+	custom_model = CustomModel().to(device)
 	print(custom_model)
+
+	test_tensor = torch.empty(64, 3, 256, 128).uniform_(0, 1).to(device)
+	print(test_tensor.shape)
+
+	output = model.forward(test_tensor)
+	print('Default model output')
+	print(output, output.shape)
+
+	backbone_out, embeddings = custom_model.forward(test_tensor)
+	print('Custom model output')
+	print(embeddings, embeddings.shape)
 
 
 if __name__ == '__main__':
