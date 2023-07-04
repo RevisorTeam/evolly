@@ -50,7 +50,7 @@ Each block is a list of its parameters:
 
 [block_id, depth_id, block_type, kernel_size, strides, filters_out, dropout]
 
-Example of config file [you can find here](examples/tf_examples/cfg.py).
+Example of config file [you can find here](examples/tf_examples/classification/cfg.py).
 
 ## 2. Create model building pipeline
 
@@ -86,8 +86,8 @@ Created model is a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/t
 [torch.nn.Module](https://pytorch.org/docs/stable/generated/torch.nn.Module.html) object of Tensorflow or 
 PyTorch framework respectively. You can utilize it in your training further.
 
-Examples: [Tensorflow](examples/tf_examples/create_model.py) /
-[PyTorch](examples/torch_examples/create_model.py)
+Examples: [Tensorflow](examples/tf_examples/classification/create_model.py) /
+[PyTorch](examples/torch_examples/classification/create_model.py)
 
 ## 3. Create training pipeline
 
@@ -108,8 +108,8 @@ per training isn’t enough to teach blocks that were initialized with random we
 4 epochs is enough only for training existing parent’s blocks with new configuration 
 (mutated kernel size, strides, filers or dropout).
 
-Examples: [Tensorflow](examples/tf_examples/train.py) /
-[PyTorch](examples/torch_examples/train.py)
+Examples: [Tensorflow](examples/tf_examples/classification/train.py) /
+[PyTorch](examples/torch_examples/classification/train.py)
 
 Advanced Tensorflow example _(will be added soon)_
 
@@ -141,8 +141,8 @@ specify accelerators which will be used during evolution
 * Define evolution parameters
 * Start infinite evolution cycle with `Evolution.start` method
 
-[Backbone tuning Tensorflow example](examples/tf_examples/backbone_tuning.py) 
-/ [Backbone search PyTorch example](examples/torch_examples/backbone_search.py)
+[Backbone tuning Tensorflow example](examples/tf_examples/classification/backbone_tuning.py) 
+/ [Backbone search PyTorch example](examples/torch_examples/classification/backbone_search.py)
 
 Then start TensorBoard process with `tensorboard --logdir PATH_TO_LOGS_DIR --port=6006` 
 in a separate terminal.

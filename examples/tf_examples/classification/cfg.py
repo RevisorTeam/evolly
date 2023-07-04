@@ -9,10 +9,13 @@ cfg.genotype = CfgNode(new_allowed=True)
 
 
 cfg.model.name = 'model_name'
+cfg.model.classes = 10
 
 # Path to the parent's weights or None
 cfg.model.parent = None
 
+cfg.train.batch_size = 64
+cfg.train.learning_rate = 0.001
 cfg.train.epochs = 10
 cfg.train.save_dir = 'fashion-mnist/models'
 

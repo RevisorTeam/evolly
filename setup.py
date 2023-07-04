@@ -36,13 +36,14 @@ setup(
 	license="MIT",
 	install_requires=[
 		"yacs",
-		"numpy",
+		"numpy>=1.19.5",
 		"pandas",
 		"matplotlib",
 		"tabulate",
 		"diagrams",
 		"fvcore",
-		"opencv-python",
+		"opencv-python>=4.5.5.0",
+		"tensorflow_similarity==0.16.7",
 	],
 	extras_require={
 		"tensorflow": ["tensorflow>=2.3"],

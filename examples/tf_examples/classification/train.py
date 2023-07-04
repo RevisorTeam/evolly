@@ -9,23 +9,15 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 tf.get_logger().setLevel('ERROR')
-import warnings
-warnings.filterwarnings('ignore')
 
-from tensorflow.python.framework.convert_to_constants import (
-	convert_variables_to_constants_v2_as_graph
-)
 from tensorflow.keras import Model
-
 from typing import Tuple, Dict
-
 from time import time
-import numpy as np
-import tempfile
 import json
 import os
 
 from evolly import compute_fitness
+from evolly import get_flops_tf
 
 from create_model import my_model
 
@@ -33,12 +25,7 @@ from create_model import my_model
 def main() -> None:
 
 	from cfg import cfg
-
 	cfg.model.name = '0000_00001'
-
-	config_path = None          # path to config file
-	if config_path:
-		cfg.merge_from_file(config_path)
 
 	# Assign which accelerator to use during training
 	accelerator_type = 'GPU'
@@ -66,7 +53,8 @@ def train_wrapper(cfg) -> None:
 		metric_op=cfg.val.metric_op
 	)
 
-	# Save trained model to file
+	# Save trained model to file.
+	# NOTE: weights of the last epoch will be saved.
 	cfg.model.name += f'_{meta_data["fitness"]:.5f}'
 	model_path = os.path.join(cfg.train.save_dir, f'{cfg.model.name}.h5')
 	model.save(model_path, save_format='h5')
@@ -77,8 +65,6 @@ def train_wrapper(cfg) -> None:
 
 
 def train(cfg) -> Tuple[Model, Dict]:
-	learning_rate = 0.1
-	batch_size = 64
 
 	meta_data = {'train_loss': [], 'val_metric': [], 'config': cfg}
 
@@ -91,17 +77,17 @@ def train(cfg) -> Tuple[Model, Dict]:
 	model = my_model(cfg)
 
 	meta_data['parameters'] = model.count_params()
-	meta_data['flops'] = get_flops(model)
+	meta_data['flops'] = get_flops_tf(model)
 
 	model.compile(
-		optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-		loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+		optimizer=tf.keras.optimizers.Adam(learning_rate=cfg.train.learning_rate),
+		loss=tf.keras.losses.SparseCategoricalCrossentropy(),
 		metrics=['accuracy']
 	)
 
 	history = model.fit(
 		train_images, train_labels,
-		batch_size=batch_size,
+		batch_size=cfg.train.batch_size,
 		epochs=cfg.train.epochs,
 		validation_data=(test_images, test_labels)
 	)
@@ -115,28 +101,6 @@ def train(cfg) -> Tuple[Model, Dict]:
 	meta_data['training_time'] = float(time() - start_time)
 
 	return model, meta_data
-
-
-def get_flops(model, write_path=tempfile.NamedTemporaryFile().name) -> int:
-	concrete = tf.function(lambda inputs: model(inputs))
-	concrete_func = concrete.get_concrete_function(
-		[tf.TensorSpec([1, *inputs.shape[1:]]) for inputs in model.inputs])
-	frozen_func, graph_def = convert_variables_to_constants_v2_as_graph(
-		concrete_func,
-		# lower_control_flow=False		# uncomment it if flops of LSTM / GRU layers compute wrong
-	)
-	with tf.Graph().as_default() as graph:
-		tf.graph_util.import_graph_def(graph_def, name='')
-		run_meta = tf.compat.v1.RunMetadata()
-		opts = tf.compat.v1.profiler.ProfileOptionBuilder.float_operation()
-		if write_path:
-			opts['output'] = 'file:outfile={}'.format(write_path)  # suppress output
-		flops = tf.compat.v1.profiler.profile(graph=graph, run_meta=run_meta, cmd="op", options=opts)
-
-		# The //2 is necessary since `profile` counts multiply and accumulate
-		# as two flops, here we report the total number of multiply accumulate ops
-		flops_total = flops.total_float_ops // 2
-		return flops_total
 
 
 def save_json(path, output_dict):

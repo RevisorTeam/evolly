@@ -44,17 +44,29 @@ in any training pipeline:
 To launch evolution with Evolly:
 
 1. Install Evolly via pip: ``pip install evolly[tensorflow,torch]``. 
-If tensorflow (>=2.3) and torch (>=1.9.0) are already installed, you can install Evolly using: ``pip install evolly`` 
-2. Follow [Making your first evolution](GETTING_STARTED.MD) guide
+If tensorflow (>=2.3) and torch (>=1.9.0) have already been installed, you can install Evolly using: ``pip install evolly`` 
+2. Follow [Making your first evolution](GETTING_STARTED.MD) guide.
 
+## Usage examples
+| Link     | Features                                                                                                                                            | Task             | Complexity | Framework   | Data   |
+|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|------------------|------------|-------------|--------|
+| **[#1]** | Simple Tensorflow training, backbone tuning                                                                                                         | Classification   | Easy       | Tensorflow  | Images |
+| **[#2]** | Simple PyTorch training, backbone search                                                                                                            | Classification   | Easy       | PyTorch     | Images |
+| **[#3]** | Custom training pipeline and losses, mixed precision, parallel and distributed training support, TPUs support, backbone search with weight transfer | Image retrieval  | Advanced   | Tensorflow  | Images |
+
+[#1]: examples/tf_examples/classification/
+[#2]: examples/torch_examples/classification/
+[#3]: examples/tf_examples/image_retrieval/
 
 ## Improvements
 
 We are open to any help. Check out [our ideas here](https://medium.com/@RevisorTeam/evolutionary-framework-for-searching-backbone-architecture-evolly-f568383ced51) to learn how we can upgrade Evolly together:
 
 - [x] Test default PyTorch blocks
+- [x] Add more usage examples
 - [ ] Add new data types
 - [ ] Add new default blocks
+- [ ] Additional parameters to mutate
 - [ ] Utilize [mutation rate](https://en.wikipedia.org/wiki/Mutation_rate) and add mutation probabilities
 - [ ] Implement reinforcement learning
 - [ ] Upgrade branch connections

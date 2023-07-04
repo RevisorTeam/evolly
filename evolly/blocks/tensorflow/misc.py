@@ -1,10 +1,15 @@
 import math
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.layers import concatenate
 from evolly.blocks.tensorflow.initializers import CONV_KERNEL_INITIALIZER
 from evolly.blocks.tensorflow.regularizers import KERNEL_REGULARIZER
+from tensorflow.python.framework.convert_to_constants import (
+	convert_variables_to_constants_v2_as_graph
+)
 from typing import Callable
+import tempfile
 
 from evolly.utils import (
 	round_up_to_nearest_even, join_block_ids, shapes_equal
@@ -325,3 +330,24 @@ def upscale_hw(x, filters_out=16, kernel_size=3, activation='relu', padding='sam
 	x = layers.Activation(activation, name=name + '_act')(x)
 
 	return x
+
+
+def get_flops_tf(model, write_path=tempfile.NamedTemporaryFile().name) -> int:
+	concrete = tf.function(lambda inputs: model(inputs))
+	concrete_func = concrete.get_concrete_function(
+		[tf.TensorSpec([1, *inputs.shape[1:]]) for inputs in model.inputs])
+	frozen_func, graph_def = convert_variables_to_constants_v2_as_graph(
+		concrete_func,
+	)
+	with tf.Graph().as_default() as graph:
+		tf.graph_util.import_graph_def(graph_def, name='')
+		run_meta = tf.compat.v1.RunMetadata()
+		opts = tf.compat.v1.profiler.ProfileOptionBuilder.float_operation()
+		if write_path:
+			opts['output'] = 'file:outfile={}'.format(write_path)  # suppress output
+		flops = tf.compat.v1.profiler.profile(graph=graph, run_meta=run_meta, cmd="op", options=opts)
+
+		# The //2 is necessary since `profile` counts multiply and accumulate
+		# as two flops, here we report the total number of multiply accumulate ops
+		flops_total = flops.total_float_ops // 2
+		return flops_total

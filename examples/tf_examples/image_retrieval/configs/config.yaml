@@ -1,0 +1,30 @@
+search:
+  children: 32
+  parents: 4
+  gen0_epochs: 150
+  epochs: 150
+  dir: 'searches/run_1'
+  w: 0.03
+  target: 10000000
+
+train:
+  validate: true
+  base_lr: 0.0001
+  save_tensorboard_logs: false
+  verbose: false
+  log_epochs: false
+  logs_dir: 'logs/run_1'
+
+genotype:
+  branch_names: ['img']
+  branches: [
+    [
+      [1, 1, 'mobilenet', 5, 2, 256, True],
+      [2, 2, 'mobilenet', 5, 1, 256, True],
+      [3, 3, 'mobilenet', 5, 2, 512, True],
+      [4, 4, 'mobilenet', 3, 1, 512, True],
+      [5, 5, 'mobilenet', 5, 2, 1024, True],
+      [6, 6, 'resnet', 3, 2, 1024, False],
+      [7, 7, 'resnet', 3, 2, 1024, False],
+    ]
+  ]

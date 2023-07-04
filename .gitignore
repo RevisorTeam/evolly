@@ -1,3 +1,7 @@
+*.py[cod]
+*.h5
+*.tfrecord
+
 .idea/
 __pycache__/
 
@@ -5,13 +9,19 @@ evolly.egg-info/
 build/
 dist/
 
-examples/tf_examples/fashion-mnist/
-examples/tf_examples/logs/
-examples/tf_examples/searches/
+examples/tf_examples/classification/fashion-mnist/
+examples/tf_examples/classification/logs/
+examples/tf_examples/classification/searches/
 
-examples/torch_examples/fashion-mnist/
-examples/torch_examples/logs/
-examples/torch_examples/searches/
+examples/torch_examples/classification/fashion-mnist/
+examples/torch_examples/classification/logs/
+examples/torch_examples/classification/searches/
+
+examples/tf_examples/image_retrieval/retrieved_samples/
+examples/tf_examples/image_retrieval/tfrecords/
+examples/tf_examples/image_retrieval/searches/
+examples/tf_examples/image_retrieval/models/
+examples/tf_examples/image_retrieval/logs/
 
 examples/visualized_runs/
 
