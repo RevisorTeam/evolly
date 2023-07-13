@@ -10,18 +10,23 @@ build/
 dist/
 
 examples/tf_examples/classification/fashion-mnist/
-examples/tf_examples/classification/logs/
 examples/tf_examples/classification/searches/
-
-examples/torch_examples/classification/fashion-mnist/
-examples/torch_examples/classification/logs/
-examples/torch_examples/classification/searches/
+examples/tf_examples/classification/logs/
 
 examples/tf_examples/image_retrieval/retrieved_samples/
 examples/tf_examples/image_retrieval/tfrecords/
 examples/tf_examples/image_retrieval/searches/
 examples/tf_examples/image_retrieval/models/
 examples/tf_examples/image_retrieval/logs/
+
+examples/torch_examples/classification/fashion-mnist/
+examples/torch_examples/classification/searches/
+examples/torch_examples/classification/logs/
+
+examples/torch_examples/object_detection/coco_2017/
+examples/torch_examples/object_detection/searches/
+examples/torch_examples/object_detection/models/
+examples/torch_examples/object_detection/logs/
 
 examples/visualized_runs/
 

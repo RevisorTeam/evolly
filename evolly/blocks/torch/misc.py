@@ -1,5 +1,8 @@
 from torch import nn
 from typing import Callable
+from fvcore.nn import FlopCountAnalysis
+from typing import Tuple, Union, List
+from torch import Tensor
 
 
 supported_activations = ['relu', 'leaky_relu', 'swish', 'silu', 'softmax', 'sigmoid']
@@ -33,3 +36,18 @@ def get_pooling_func(branch_type: str, pooling_type: str) -> Callable:
 		pooling_func = nn.AdaptiveAvgPool1d(1) if pooling_type == 'avg' else nn.AdaptiveMaxPool1d(1)
 
 	return pooling_func
+
+
+class GetFlops(FlopCountAnalysis):
+	"""
+	Silent FlopCountAnalysis wrapper.
+	Warnings with unsupported operations are disabled by default (when warn=False).
+	"""
+	def __init__(
+			self,
+			model: nn.Module,
+			inputs: Union[Tensor, Tuple[Tensor, ...], List[Tensor]],
+			warn: bool = False,
+	) -> None:
+		super().__init__(model=model, inputs=inputs)
+		self._enable_warn_unsupported_ops = True if warn else False

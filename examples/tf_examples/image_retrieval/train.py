@@ -346,7 +346,7 @@ def train(strategy, cfg) -> Tuple[Model, Dict]:
 	)
 
 	epoch = 1
-	best_weights, best_loss, best_epoch_id = None, 0.0, 0
+	best_weights, best_val_metric, best_epoch_id = None, 0.0, 0
 	val_metric = 0.0
 	while epoch <= cfg.train.epochs:
 
@@ -412,8 +412,8 @@ def train(strategy, cfg) -> Tuple[Model, Dict]:
 			meta_data['val_metric'].append(float(val_metric))
 
 			if cfg.val.save_best:
-				if val_metric > best_loss:
-					best_weights, best_loss, best_epoch_id = \
+				if val_metric > best_val_metric:
+					best_weights, best_val_metric, best_epoch_id = \
 						model.get_weights(), val_metric, epoch
 					if cfg.train.verbose:
 						print('Cached model weights')
@@ -447,9 +447,9 @@ def train(strategy, cfg) -> Tuple[Model, Dict]:
 	meta_data['training_time'] = time() - ts
 
 	if cfg.train.verbose:
-		print('Best val metric:', best_loss)
+		print('Best val metric:', best_val_metric)
 		print('Best epoch id:', best_epoch_id)
-		print('Training time', time() - ts)
+		print('Training time', meta_data['training_time'])
 
 	if cfg.val.save_best:
 		best_weights = model.get_weights() if best_weights is None else best_weights

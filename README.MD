@@ -53,10 +53,12 @@ If tensorflow (>=2.3) and torch (>=1.9.0) have already been installed, you can i
 | **[#1]** | Simple Tensorflow training, backbone tuning                                                                                                         | Classification   | Easy       | Tensorflow  | Images |
 | **[#2]** | Simple PyTorch training, backbone search                                                                                                            | Classification   | Easy       | PyTorch     | Images |
 | **[#3]** | Custom training pipeline and losses, mixed precision, parallel and distributed training support, TPUs support, backbone search with weight transfer | Image retrieval  | Advanced   | Tensorflow  | Images |
+| **[#4]** | PyTorch training, custom augmentations (albumentations), backbone search                                                                            | Object detection | Medium     | PyTorch     | Images |
 
 [#1]: examples/tf_examples/classification/
 [#2]: examples/torch_examples/classification/
 [#3]: examples/tf_examples/image_retrieval/
+[#4]: examples/torch_examples/object_detection/
 
 ## Improvements
 
@@ -66,11 +68,12 @@ We are open to any help. Check out [our ideas here](https://medium.com/@RevisorT
 - [x] Add more usage examples
 - [ ] Add new data types
 - [ ] Add new default blocks
-- [ ] Additional parameters to mutate
+- [ ] Custom parameters to mutate
 - [ ] Utilize [mutation rate](https://en.wikipedia.org/wiki/Mutation_rate) and add mutation probabilities
 - [ ] Implement reinforcement learning
 - [ ] Upgrade branch connections
 - [ ] Implement ability to build multiple branches with torch
+- [ ] Ability to search for block architectures
 
 
 ## References

@@ -44,13 +44,14 @@ setup(
 		"fvcore",
 		"opencv-python>=4.5.5.0",
 		"tensorflow_similarity==0.16.7",
+		"albumentations"
 	],
 	extras_require={
 		"tensorflow": ["tensorflow>=2.3"],
 		"tensorflow-gpu": ["tensorflow-gpu>=2.3"],
 		"tensorflow-cpu": ["tensorflow-cpu>=2.3"],
-		"torch": ["torch>=1.9.0"],
-		"torchvision": ["torchvision>=0.10.0"],
+		"torch": ["torch>=1.10.1"],
+		"torchvision": ["torchvision>=0.11.2"],
 	},
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
