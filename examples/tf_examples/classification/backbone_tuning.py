@@ -5,14 +5,14 @@ Example of architecture tuning with Evolly
 # Import silent TF
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 import warnings
 warnings.filterwarnings('ignore')
 
 from evolly import Evolution
 from train import train_wrapper as train_wrapper
 from cfg import cfg
+
+import tensorflow as tf
 
 
 def main():

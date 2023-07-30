@@ -152,8 +152,6 @@ def make_tf_model(
 	"""
 
 	import tensorflow as tf
-	from tensorflow.keras import layers, Model
-	from tensorflow.keras.layers import concatenate
 
 	from evolly.blocks.tensorflow.initializers import CONV_KERNEL_INITIALIZER
 	from evolly.blocks.tensorflow.regularizers import KERNEL_REGULARIZER
@@ -180,7 +178,7 @@ def make_tf_model(
 		initial_filters = branch['initial_filters'] \
 			if 'initial_filters' in branch.keys() else 32
 
-		branch_inputs = layers.Input(shape=input_shape)
+		branch_inputs = tf.keras.layers.Input(shape=input_shape)
 		inputs.append(branch_inputs)
 
 		# Create default initial layers
@@ -204,10 +202,10 @@ def make_tf_model(
 				kernel_regularizer=KERNEL_REGULARIZER,
 				name=f'{branch_name}_init_conv')(branch_inputs)
 
-			branch_layers[branch_name] = layers.BatchNormalization(
+			branch_layers[branch_name] = tf.keras.layers.BatchNormalization(
 				name=f'{branch_name}_init_bn')(branch_layers[branch_name])
 
-			branch_layers[branch_name] = layers.Activation(
+			branch_layers[branch_name] = tf.keras.layers.Activation(
 				activation, name=f'{branch_name}_init_activation')(branch_layers[branch_name])
 
 			branch_layers[branch_name] = branch_layers[branch_name]
@@ -282,7 +280,7 @@ def make_tf_model(
 
 		# Add fully connected layer after global pooling
 		if dense_after_pooling:
-			branch_layers[branch_name] = layers.Dense(
+			branch_layers[branch_name] = tf.keras.layers.Dense(
 				units=pooling_dense_filters,
 				name=f'{branch_name}_connection_dense'
 			)(branch_layers[branch_name])
@@ -292,20 +290,22 @@ def make_tf_model(
 	if len(branches_outputs) > 1:
 
 		if branches_merge_op == 'add':
-			output = layers.Add(name=f'connection_add')(branches_outputs)
+			output = tf.keras.layers.Add(name=f'connection_add')(branches_outputs)
 
 		elif branches_merge_op == 'multiply':
-			output = layers.Multiply(name=f'connection_multiply')(branches_outputs)
+			output = tf.keras.layers.Multiply(name=f'connection_multiply')(branches_outputs)
 
 		# When branches_merge_op == 'concat'
 		else:
-			output = concatenate(branches_outputs, axis=-1, name=f'connection_concat')
+			output = tf.keras.layers.concatenate(
+				branches_outputs, axis=-1, name=f'connection_concat'
+			)
 
 		if branches_merge_bn:
-			output = layers.BatchNormalization(name='connection_bn')(output)
+			output = tf.keras.layers.BatchNormalization(name='connection_bn')(output)
 
 		if branches_merge_act:
-			output = layers.Activation(activation, name='connection_act')(output)
+			output = tf.keras.layers.Activation(activation, name='connection_act')(output)
 
 	else:
 		output = branches_outputs[0]
@@ -318,11 +318,11 @@ def make_tf_model(
 		# (not to lose accuracy in fp16 outputs).
 
 		if model_type == 'embedding':
-			output = layers.Dense(units=embedding_size, dtype='float32', name='out_dense')(output)
+			output = tf.keras.layers.Dense(units=embedding_size, dtype='float32', name='out_dense')(output)
 			output = tf.nn.l2_normalize(output, axis=-1)
 
 		elif model_type == 'classification':
-			output = layers.Dense(
+			output = tf.keras.layers.Dense(
 				classes, activation=classifier_activation, dtype='float32', name='predictions')(output)
 
 		elif model_type == 'pose':
@@ -339,7 +339,7 @@ def make_tf_model(
 				)
 
 			# Create heatmap layer
-			output = layers.Conv2D(
+			output = tf.keras.layers.Conv2D(
 				keypoints,
 				kernel_size=3,
 				padding='same',
@@ -354,7 +354,7 @@ def make_tf_model(
 		for layer in custom_head:
 			output = layer(output)
 
-	model = Model(
+	model = tf.keras.Model(
 		inputs=inputs if len(inputs) > 1 else inputs[0],
 		outputs=output,
 		name=model_name

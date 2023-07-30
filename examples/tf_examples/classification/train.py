@@ -7,8 +7,6 @@ https://www.tensorflow.org/tutorials/keras/classification
 """
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 
 from tensorflow.keras import Model
 from typing import Tuple, Dict
@@ -20,6 +18,8 @@ from evolly import compute_fitness
 from evolly import get_flops_tf
 
 from create_model import my_model
+
+import tensorflow as tf
 
 
 def main() -> None:

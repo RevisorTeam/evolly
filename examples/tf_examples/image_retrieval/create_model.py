@@ -3,19 +3,16 @@ Tensorflow example of creating image retrieval model using Evolly
 """
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-from tensorflow.keras import layers
+
 from evolly import build_model, unpack_genotype, get_flops_tf
 from evolly.blocks.tensorflow import (
 	resnet_block, mobilenet_block,
 	inception_resnet_block_a, inception_resnet_block_b
 )
 
-from tensorflow.keras.applications.resnet50 import ResNet50
-from tensorflow.keras.models import load_model
-from tensorflow.keras import Model
-
 from utils import transfer_params
+
+import tensorflow as tf
 
 
 def my_model(cfg):
@@ -65,7 +62,7 @@ def my_model(cfg):
 	initial_filters = branches['img']['initial_filters']
 	custom_init_layers = {
 		'img': [
-			layers.Conv2D(
+			tf.keras.layers.Conv2D(
 				filters=initial_filters,
 				kernel_size=5,
 				strides=2,
@@ -73,15 +70,15 @@ def my_model(cfg):
 				use_bias=False,
 				name='img_custom_init_conv'
 			),
-			layers.BatchNormalization(name='img_custom_init_bn'),
-			layers.Activation('leaky_relu', name='img_custom_init_activation'),
+			tf.keras.layers.BatchNormalization(name='img_custom_init_bn'),
+			tf.keras.layers.Activation('leaky_relu', name='img_custom_init_activation'),
 		]
 	}
 
 	# Custom head of the model. If you don't need it, set to None.
 	# Make sure dtype of the last layer in the model is float32 in order
 	# not to lose accuracy while training in mixed precision mode.
-	custom_head = [layers.BatchNormalization(name='out_bn', dtype='float32')]
+	custom_head = [tf.keras.layers.BatchNormalization(name='out_bn', dtype='float32')]
 
 	# Build a TensorFlow model. Embedding size will be specified by outputs
 	# of the last block in model.
@@ -101,7 +98,7 @@ def my_model(cfg):
 
 	if cfg.model.load_weights:
 		if cfg.model.parent is not None:
-			parent = load_model(cfg.model.parent, compile=False)
+			parent = tf.keras.models.load_model(cfg.model.parent, compile=False)
 			model = transfer_params(
 				parent, model, verbose=False, return_stats=False
 			)
@@ -112,9 +109,9 @@ def my_model(cfg):
 def resnet50(cfg, freeze=False, pretrained=True):
 
 	# Load base resnet50 backbone
-	inputs = layers.Input(shape=cfg.dataset.input_shape)
+	inputs = tf.keras.layers.Input(shape=cfg.dataset.input_shape)
 
-	base_model = ResNet50(
+	base_model = tf.keras.applications.resnet50.ResNet50(
 		input_tensor=inputs,
 		weights='imagenet' if pretrained else None,
 		include_top=False
@@ -127,16 +124,16 @@ def resnet50(cfg, freeze=False, pretrained=True):
 
 	# add a global spatial average pooling layer
 	x = base_model.output
-	x = layers.GlobalAveragePooling2D()(x)
+	x = tf.keras.layers.GlobalAveragePooling2D()(x)
 
 	# Custom head as in CTL
-	embeddings = layers.BatchNormalization(name='out_bn', dtype='float32')(x)
+	embeddings = tf.keras.layers.BatchNormalization(name='out_bn', dtype='float32')(x)
 
 	# Default embedding head
-	# embeddings = layers.Dense(units=embedding_size, dtype='float32', activation=None)(x)
+	# embeddings = tf.keras.layers.Dense(units=embedding_size, dtype='float32', activation=None)(x)
 	# embeddings = tf.nn.l2_normalize(embeddings, axis=-1)
 
-	resnet = Model(
+	resnet = tf.keras.Model(
 		inputs=base_model.input,
 		outputs=embeddings,
 		name='resnet50'
@@ -169,7 +166,7 @@ def main():
 	)
 
 	# Load trained model and transfer weights from it to untrained model
-	parent = load_model(parent_path, compile=False)
+	parent = tf.keras.models.load_model(parent_path, compile=False)
 	transferred_model, stats = transfer_params(
 		parent, model, verbose=True, return_stats=True
 	)

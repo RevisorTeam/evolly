@@ -1,7 +1,5 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 
 from evolly import build_model, unpack_genotype
 
@@ -13,9 +11,10 @@ from evolly.blocks.tensorflow import (
 	pose_conv_block, pose_lstm_block, pose_gru_block
 )
 
+import tensorflow as tf
+
 
 def main():
-	from tensorflow.keras import layers
 
 	unpacked_blocks, unpacked_blocks_order = unpack_genotype(
 		branches_blocks=branches_blocks,
@@ -40,7 +39,7 @@ def main():
 	initial_filters = branches['img']['initial_filters']
 	custom_init_layers = {
 		'img': [
-			layers.Conv2D(
+			tf.keras.layers.Conv2D(
 				filters=initial_filters,
 				kernel_size=5,
 				strides=2,
@@ -48,20 +47,20 @@ def main():
 				use_bias=False,
 				name='img_custom_init_conv'
 			),
-			layers.BatchNormalization(name='img_custom_init_bn'),
-			layers.Activation('leaky_relu', name='img_custom_init_activation'),
+			tf.keras.layers.BatchNormalization(name='img_custom_init_bn'),
+			tf.keras.layers.Activation('leaky_relu', name='img_custom_init_activation'),
 		]
 	}
 	# custom_init_layers = None
 
 	# Custom head
 	# custom_head = [
-	# 	layers.Dense(units=1024, dtype='float32', activation=None, name='out_dense1'),
-	# 	layers.BatchNormalization(name='out_bn'),
-	# 	layers.Dense(units=1024, dtype='float32', activation=None, name='out_dense2'),
+	# 	tf.keras.layers.Dense(units=1024, dtype='float32', activation=None, name='out_dense1'),
+	# 	tf.keras.layers.BatchNormalization(name='out_bn'),
+	# 	tf.keras.layers.Dense(units=1024, dtype='float32', activation=None, name='out_dense2'),
 	# ]
 
-	custom_head = [layers.BatchNormalization(name='out_bn')]
+	custom_head = [tf.keras.layers.BatchNormalization(name='out_bn')]
 	# custom_head = None
 
 	model = build_model(

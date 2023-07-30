@@ -1,12 +1,12 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 
 import numpy as np
 from tensorflow_similarity.distances import EuclideanDistance
 from dataset.dataloader import load_dataset
 from dataset.metrics import build_embeddings_from_dataset, ValIndexer
+
+import tensorflow as tf
 
 
 def main():

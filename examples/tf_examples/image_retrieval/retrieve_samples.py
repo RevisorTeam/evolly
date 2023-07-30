@@ -10,8 +10,6 @@ It uses only preprocessed tf dataset splits as inputs.
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 
 from tensorflow_similarity.distances import EuclideanDistance
 
@@ -22,6 +20,8 @@ import sys
 
 from dataset.dataloader import load_dataset
 from dataset.metrics import build_embeddings_from_dataset, ValIndexer
+
+import tensorflow as tf
 
 
 def main():

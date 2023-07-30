@@ -8,8 +8,6 @@ image retrieval model on the Polyvore dataset:
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
 
 from evolly import compute_fitness, get_flops_tf
 from utils import (
@@ -34,6 +32,8 @@ from time import time
 import os.path as osp
 import numpy as np
 import atexit
+
+import tensorflow as tf
 
 
 def main() -> None:
