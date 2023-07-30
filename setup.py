@@ -43,7 +43,7 @@ setup(
 		"diagrams",
 		"fvcore",
 		"opencv-python>=4.5.5.0",
-		"tensorflow_similarity==0.16.7",
+		"tensorflow_similarity>=0.16.7",
 		"albumentations"
 	],
 	extras_require={
