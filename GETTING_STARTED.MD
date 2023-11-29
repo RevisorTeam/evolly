@@ -108,7 +108,8 @@ per training isn’t enough to teach blocks that were initialized with random we
 4 epochs is enough only for training existing parent’s blocks with new configuration 
 (mutated kernel size, strides, filers or dropout).
 
-Examples: [Tensorflow](examples/tf_examples/classification/train.py) /
+Examples: [Tensorflow](examples/tf_examples/classification/train.py) / 
+[Advanced Tensorflow example ](examples/tf_examples/image_retrieval/train.py) / 
 [PyTorch](examples/torch_examples/classification/train.py)
 
 Advanced Tensorflow example _(will be added soon)_
