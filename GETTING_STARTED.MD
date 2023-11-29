@@ -112,8 +112,6 @@ Examples: [Tensorflow](examples/tf_examples/classification/train.py) /
 [Advanced Tensorflow example ](examples/tf_examples/image_retrieval/train.py) / 
 [PyTorch](examples/torch_examples/classification/train.py)
 
-Advanced Tensorflow example _(will be added soon)_
-
 Metadata file must have `.json` format and following structure:
 
 | Key             | Description                    | Data type      |
